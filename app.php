@@ -68,7 +68,9 @@ class App {
 
     function render() {
 
-        if ($_REQUEST['action'] == 'feed') {
+        if (!isset($_REQUEST['action'])) {
+            die('No action selected.');
+        } elseif ($_REQUEST['action'] == 'feed') {
             header('Content-type: text/calendar; charset=utf-8');
             header('Content-Disposition: inline; filename=calendar.ics');
             echo $this->getICS();
