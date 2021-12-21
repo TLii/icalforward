@@ -22,6 +22,8 @@ if (!isset($validEntry)) {
  */
 
     $config = array(
+        'site_url' => 'https://tuomas.fun/calforward', // Site URI
+        'site_secret' => '', // Secret for requests
         'calendar_url' => 'https://example.com/calendars/feed.ics', // url pointing to the original calendar feed
         'need_auth' => true, // chance to false, if no authentication is needed
         'calendar_username' => 'example', // your calendar username

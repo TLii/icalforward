@@ -77,9 +77,54 @@ class App {
             exit;
         } elseif ($_REQUEST['action'] == 'raw') {
             echo $this->getICS();
+        } elseif ($_REQUEST['action'] == 'setsecret') {
+            echo $this->newProxyURL();
         } else {
             echo 'Malformed request: No action specified.';
         }
+    }
+
+    function newProxyURL() {
+        if (!file_exists('./config.php')) {
+            echo "Config file missing. Setup first.";
+            return;
+        }
+        global $config;
+
+        if ($_REQUEST['really'] == 'yes') {
+            $newSecret = $this->gen_uuid();
+            echo "New calendar URL is: " . $config['site_url'] . "/index.php?secret=$newSecret";
+
+        } else {
+            echo "Are you sure? <a href=\"index.php?action=setsecret&really=yes\">YES</a>";
+        }
+    }
+
+    function gen_uuid()
+    {
+        return sprintf(
+            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+            // 32 bits for "time_low"
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+
+            // 16 bits for "time_mid"
+            mt_rand(0, 0xffff),
+
+            // 16 bits for "time_hi_and_version",
+            // four most significant bits holds version number 4
+            mt_rand(0, 0x0fff) | 0x4000,
+
+            // 16 bits, 8 bits for "clk_seq_hi_res",
+            // 8 bits for "clk_seq_low",
+            // two most significant bits holds zero and one for variant DCE1.1
+            mt_rand(0, 0x3fff) | 0x8000,
+
+            // 48 bits for "node"
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff)
+        );
     }
 
 }
